@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+  labels:
+    app: node-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-app-demo
+  template:
+    metadata:
+      labels:
+        app: node-app-demo
+    spec:
+      volumes:
+      - name: fortunes
+        persistentVolumeClaim:
+            claimName: fortune-pvc
+      containers:
+      - name: node-app-container
+        image: domminiks/node-app
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: fortunes
+          mountPath: /fortunes
